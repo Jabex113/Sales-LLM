@@ -1,0 +1,56 @@
+model:
+  name: "SalesLLM-Tiny"
+  architecture: "GPT"
+  
+  vocab_size: 4000
+  max_seq_length: 256
+  embedding_dim: 128
+  num_layers: 2
+  num_heads: 2
+  ff_dim: 512
+  dropout: 0.0
+
+training:
+  batch_size: 1
+  gradient_accumulation_steps: 2
+  learning_rate: 5.0e-4
+  weight_decay: 0.01
+  max_epochs: 50
+  warmup_steps: 50
+  max_steps: -1
+  
+  optimizer: "AdamW"
+  lr_scheduler: "cosine"
+  max_grad_norm: 1.0
+  
+  save_every: 500
+  eval_every: 250
+  
+  device: "cpu"
+  mixed_precision: false
+  compile_model: false
+
+data:
+  train_split: 0.9
+  val_split: 0.1
+  
+  sources:
+    - chat_logs
+    - pdfs
+    - images_ocr
+  
+  min_text_length: 50
+  max_text_length: 1024
+
+data_path: "data/processed/processed_texts_restructured.jsonl"
+
+tokenizer:
+  type: "BPE"
+  vocab_size: 4000
+  special_tokens:
+    - "<|endoftext|>"
+    - "<|pad|>"
+    - "<|unk|>"
+    - "<|user|>"
+    - "<|assistant|>"
+    - "<|system|>"
